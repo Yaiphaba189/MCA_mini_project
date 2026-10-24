@@ -4,7 +4,7 @@ Created: 2026-10-20 · Status: planning (no code yet)
 
 ## 0. One-paragraph summary
 
-Continual-adaptation methods decide *when* to update (trigger) and *how* (adapter, replay, growth). Almost none decide *whether to keep* a candidate update. We build a **commit gate** for LoRA-style adapters: before merging a candidate adapter, score it on (a) held-out new-domain data and (b) a retention probe set, and reject or roll back predicted-harmful updates. We test whether this beats entropy-triggered adapter growth (the author's prior work) and always-update, at similar compute.
+Continual-adaptation methods decide *when* to update (trigger) and *how* (adapter, replay, growth). Few decide *whether to keep* a candidate update: existing gated-update work (for example STABLE, arXiv:2510.16089) checks the stability of LoRA merges against a budget, but does not score candidates on held-out new-domain gain together with retention, and does not measure how well such a gate predicts the true value of an update. We build a **commit gate** for LoRA-style adapters: before merging a candidate adapter, score it on (a) held-out new-domain data and (b) a retention probe set, and reject or roll back predicted-harmful updates. We test whether this beats entropy-triggered adapter growth (the author's prior work) and always-update, at similar compute.
 
 **Core claim to test (H1):** a gate that scores candidates on held-out new data plus a retention probe set yields better new-domain performance and less forgetting than trigger-only updating, at comparable compute.
 

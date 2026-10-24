@@ -10,6 +10,8 @@ Created: 2026-10-20 · Companion to `01_research_plan.md` (what and why) and `02
 - Tick boxes in this file as you go. Do not delete finished phases.
 - Time estimates follow the 12-week plan in `01_research_plan.md` §5. They assume part-time work on one Apple-silicon laptop for dev runs and rented GPU time for the 7–8B phase only.
 
+**Compute decision (2026-10-24).** All model training and real-model evaluation runs on **Google Colab** (GPU), not on the local laptop. The laptop is used only for editing code and running tests with tiny/fake models on CPU. Use `notebooks/colab_run.ipynb` (clones the repo, installs, writes results to Google Drive). Wherever this plan says "MPS", read "CUDA on Colab" for real runs; keep MPS/CPU only for the tiny-model unit tests. Colab sessions reset, so runs must stay resumable (P7.3) and write to Drive.
+
 ## Phase map
 
 | Phase | Name | Week | Output | Gate to next phase |
@@ -155,22 +157,22 @@ results/               # git-ignored run outputs
 
 **Steps**
 
-- [ ] **P2.1** Create the folders and empty modules above. Add `configs/base.yaml` with: model name, device, dtype, seed, sequence length (start 256), batch size, LoRA (`r=8`, `alpha=16`, `dropout=0.05`, target `q_proj,v_proj`), learning rate (`2e-4`), steps per candidate, probe sizes, `lambda`, `tau`, `eps`.
-- [ ] **P2.2** Implement `seed.py` and `config.py` (load YAML → dataclass, allow `--set key=value` overrides, write the resolved config into the run folder).
-- [ ] **P2.3** Implement `io_utils.py`: `RunLogger.log(event, **fields)` appends a JSON line with timestamp; `write_summary(dict)`.
-- [ ] **P2.4** Implement `eval/nll.py`: `nll(model, token_batches) -> float` (mean over non-padding tokens, `torch.no_grad`, `model.eval()`, restores train mode afterwards). Also return the token count so costs can be logged.
-- [ ] **P2.5** Write tests in `tests/test_eval.py`:
+- [x] **P2.1** Create the folders and empty modules above. Add `configs/base.yaml` with: model name, device, dtype, seed, sequence length (start 256), batch size, LoRA (`r=8`, `alpha=16`, `dropout=0.05`, target `q_proj,v_proj`), learning rate (`2e-4`), steps per candidate, probe sizes, `lambda`, `tau`, `eps`.
+- [x] **P2.2** Implement `seed.py` and `config.py` (load YAML → dataclass, allow `--set key=value` overrides, write the resolved config into the run folder).
+- [x] **P2.3** Implement `io_utils.py`: `RunLogger.log(event, **fields)` appends a JSON line with timestamp; `write_summary(dict)`.
+- [x] **P2.4** Implement `eval/nll.py`: `nll(model, token_batches) -> float` (mean over non-padding tokens, `torch.no_grad`, `model.eval()`, restores train mode afterwards). Also return the token count so costs can be logged.
+- [x] **P2.5** Write tests in `tests/test_eval.py`:
   - same model + same data → identical NLL twice (determinism)
   - padding does not change the result
   - NLL of a random-init tiny model is close to `log(vocab_size)`
   - perplexity = `exp(nll)`
-- [ ] **P2.6** Add a `compute counter` utility: counts forward tokens and training tokens per run (used for the compute metric in Phase 7). Unit-test it.
-- [ ] **P2.7** Add `.gitignore` (`results/`, `.venv/`, `*.pt`, `__pycache__`) and `git init` the project so every result can be tied to a commit hash. Log the commit hash in each run's `summary.json`.
+- [x] **P2.6** Add a `compute counter` utility: counts forward tokens and training tokens per run (used for the compute metric in Phase 7). Unit-test it.
+- [x] **P2.7** Add `.gitignore` (`results/`, `.venv/`, `*.pt`, `__pycache__`) and `git init` the project so every result can be tied to a commit hash. Log the commit hash in each run's `summary.json`.
 
 **Done when**
-- [ ] `pytest -q` passes
-- [ ] a run folder is created with `config.yaml` and `log.jsonl` by a dummy script
-- [ ] NLL on a fixed sentence is identical across two processes
+- [x] `pytest -q` passes
+- [x] a run folder is created with `config.yaml` and `log.jsonl` by a dummy script
+- [x] NLL on a fixed sentence is identical across two processes
 
 **Pitfalls.** Mean over *tokens*, not over sequences, and use the same definition everywhere. Mask padding in both the loss and the token count.
 
@@ -455,8 +457,8 @@ class Method:
 | Phase | Started | Finished | Notes |
 |---|---|---|---|
 | 0 | | | |
-| 1 | | | |
-| 2 | | | |
+| 1 | 2026-10-24 | partial | Notes in `docs/literature_notes.md`. Only abstract/HTML-level reading; CAWM, SEGA, SPREAD, replay-retention paper not found. STABLE (2510.16089) narrows the gap. |
+| 2 | 2026-10-24 | 2026-10-24 | Skeleton + eval harness done; 12 CPU tests pass |
 | 3 | | | |
 | 4 | | | |
 | 5 | | | |

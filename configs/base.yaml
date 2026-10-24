@@ -1,0 +1,19 @@
+model_name: Qwen/Qwen2.5-0.5B
+device: auto
+dtype: float32
+seed: 0
+seq_len: 256
+batch_size: 8
+lr: 2.0e-4
+steps_per_candidate: 50
+holdout_size: 128
+retention_probe_size: 64
+eval_every: 5
+lam: 1.0
+tau: 0.0
+eps: 0.02
+lora:
+  r: 8
+  alpha: 16
+  dropout: 0.05
+  target_modules: [q_proj, v_proj]

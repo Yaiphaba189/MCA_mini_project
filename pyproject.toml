@@ -3,11 +3,24 @@ name = "commitgate"
 version = "0.1.0"
 description = "Validated commit gates for continually adapted language models"
 requires-python = ">=3.10"
-dependencies = ["torch>=2.2", "transformers>=4.40", "datasets>=2.18", "numpy>=1.24"]
+dependencies = [
+    "torch>=2.2",
+    "transformers>=4.40",
+    "datasets>=2.18",
+    "numpy>=1.24",
+    "peft",
+    "accelerate",
+    "pyyaml",
+    "scipy",
+    "scikit-learn",
+    "pandas",
+    "tqdm",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=7.4"]
 plot = ["matplotlib>=3.7"]
+cuda = ["bitsandbytes"]
 
 [build-system]
 requires = ["setuptools>=68"]

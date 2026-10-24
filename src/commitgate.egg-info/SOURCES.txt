@@ -1,6 +1,0 @@
-pyproject.toml
-src/commitgate.egg-info/PKG-INFO
-src/commitgate.egg-info/SOURCES.txt
-src/commitgate.egg-info/dependency_links.txt
-src/commitgate.egg-info/requires.txt
-src/commitgate.egg-info/top_level.txt
